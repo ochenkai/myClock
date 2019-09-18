@@ -12,7 +12,26 @@
       body {
         background: black
       }
-
+      
+      @font-face {
+        font-family: led16sgItalic; /*这里是说明调用来的字体名字*/
+        src: url('./led16sgItalic.ttf'); /*这里是字体文件路径*/
+      } 
+      
+      @font-face {
+        font-family: ledcounter;
+        src: url('./led_counter-7.ttf');
+      }
+      
+      @font-face {
+        font-family: ledboard;
+        src: url('./led_board-7.ttf');
+      }
+      
+      body {
+        font-family: Hei, Helvetica, Arial, sans-serif;
+      }
+      
       .clock {
         position: absolute;
         opacity: 1
@@ -36,6 +55,14 @@
         top: 0;
         left: 0;
         transform: translate(-50%, -50%)
+      }
+      .datesite {
+        position: absolute;
+        top: 44px;
+        left: 0;
+        transform: translate(-50%, -50%);
+        color: #fff;
+        z-index: -1;
       }
 
       .anchor {
@@ -114,7 +141,7 @@
 
       .hour-text {
         position: absolute;
-        font: 40px Hei, Helvetica, Arial, sans-serif;
+        font-size: 40px;
         color: white;
         transform: translate(-50%, -50%)
       }
@@ -129,7 +156,7 @@
 
       .minute-text {
         position: absolute;
-        font: 12px Avenir Next, Helvetica, Arial, sans-serif;
+        font-size: 12px;
         color: white;
         transform: translate(-50%, -50%)
       }
@@ -161,6 +188,10 @@
     <div class="fill">
       <div class="selection">
         <select name="colors" onchange="changeTheme()">
+          <option value="默认">默认</option>
+          <option value="字体1">字体1</option>
+          <option value="字体2">字体2</option>
+          <option value="字体3">字体3</option>
           <option value="黑">黑</option>
           <option value="白">白</option>
           <option value="浅绿">浅绿</option>
@@ -691,6 +722,7 @@
           </div>
           <div class="expand round circle-2"></div>
           <div class="expand round circle-3"></div>
+          <div class="datesite"></div>
         </div>
       </div>
     </div>
@@ -748,11 +780,29 @@
           rotate(secondElement, time)
           rotate(minuteElement, time / 60)
           rotate(hourElement, time / 60 / 12)
+          if (now.getMinutes() == 0) {
+            makeDate()
+          }
           requestAnimationFrame(animate)
         }
-        for (var i = 1; i <= 60; i++) minute(i)
-        for (var i = 1; i <= 12; i++) hour(i)
+        var makeDate = function() {
+          var now = new Date()
+          var month = now.getMonth() + 1 
+          month = month >= 10 ? month : '0' + month
+          var day = now.getDate()
+          day = day >= 10 ? day : '0' + day
+          var dateStr = now.getFullYear() + '-' + month + '-' + day
+          var dateEle = document.getElementsByClassName('datesite')
+          dateEle[0].innerHTML = dateStr
+        }
+        for (var i = 1; i <= 60; i++) {
+          minute(i)
+        } 
+        for (var i = 1; i <= 12; i++) {
+          hour(i)
+        }
         animate()
+        makeDate()
       }
 
       function autoResize(element, nativeSize) {
@@ -773,18 +823,36 @@
         $('.circle-2').css('background','#bd3547');
         $('.second-hand').css('background', '#bd3547');
       }
+      function blackColor () {
+        $('.minute-text').css('color','#fff');
+        $('.minute-line').css('background','#fff');
+        $('.hour-text').css('color','#fff');
+        $('.thin-hand').css('background','#fff');
+        $('.fat-hand').css('background','#fff');
+        $('.circle-1').css('background','#fff');
+        $('.circle-2').css('background','#fa9F22');
+        $('.second-hand').css('background', '#fa9F22');
+      }
       function changeTheme (e) {
         var body = document.getElementsByTagName('body')[0];
-        if (document.getElementsByName('colors')[0].value == '黑') {
+        if (document.getElementsByName('colors')[0].value == '默认') {
           body.style.background="#000";
-          $('.minute-text').css('color','#fff');
-          $('.minute-line').css('background','#fff');
-          $('.hour-text').css('color','#fff');
-          $('.thin-hand').css('background','#fff');
-          $('.fat-hand').css('background','#fff');
-          $('.circle-1').css('background','#fff');
-          $('.circle-2').css('background','#fa9F22');
-          $('.second-hand').css('background', '#fa9F22');
+          body.style.fontFamily="Hei, Helvetica, Arial, sans-serif";
+          $('.hour-text').css('font-size','40px')
+          hour-text
+          blackColor()
+        }  else if  (document.getElementsByName('colors')[0].value == '字体1') {
+          body.style.fontFamily="led16sgItalic";
+          $('.hour-text').css('font-size','35px')
+        } else if  (document.getElementsByName('colors')[0].value == '字体2') {
+          body.style.fontFamily="ledcounter";
+          $('.hour-text').css('font-size','30px')
+        } else if  (document.getElementsByName('colors')[0].value == '字体3') {
+          body.style.fontFamily="ledboard";
+          $('.hour-text').css('font-size','30px')
+        } else if  (document.getElementsByName('colors')[0].value == '黑') {
+          body.style.background="#000";
+          blackColor()
         } else if  (document.getElementsByName('colors')[0].value == '白') {
           body.style.background="#eee";
           normalColor()
