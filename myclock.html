@@ -791,7 +791,7 @@
           month = month >= 10 ? month : '0' + month
           var day = now.getDate()
           day = day >= 10 ? day : '0' + day
-          var dateStr = now.getFullYear() + '-' + month + '-' + day
+          var dateStr = month + '-' + day
           var dateEle = document.getElementsByClassName('datesite')
           dateEle[0].innerHTML = dateStr
         }
@@ -839,7 +839,6 @@
           body.style.background="#000";
           body.style.fontFamily="Hei, Helvetica, Arial, sans-serif";
           $('.hour-text').css('font-size','40px')
-          hour-text
           blackColor()
         }  else if  (document.getElementsByName('colors')[0].value == '字体1') {
           body.style.fontFamily="led16sgItalic";
